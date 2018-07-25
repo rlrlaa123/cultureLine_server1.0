@@ -19,7 +19,7 @@ class QNAController extends Controller
     {
         $response = [];
 
-        $questions = Question::all();
+        $questions = Question::paginate(10);
 
 //        $answers = [];
 
