@@ -39,10 +39,9 @@ class AnswerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'question_id' => 'required',
             'contents' => 'required',
         ]);
 
@@ -55,7 +54,7 @@ class AnswerController extends Controller
 
         $answer = new Answer;
 
-        $answer->question_id = Question::where('id', $request->question_id)->first()->id;
+        $answer->question_id = Question::where('id', $id)->first()->id;
         $answer->author_id = auth()->user()->id;
 
         $answer->contents = $request->contents;
@@ -94,7 +93,7 @@ class AnswerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $question_id, $id)
     {
         $validator = Validator::make($request->all(), [
             'contents' => 'required',
@@ -120,7 +119,7 @@ class AnswerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($question_id, $id)
     {
         $answer = Answer::find($id);
 
@@ -129,7 +128,7 @@ class AnswerController extends Controller
         return response('success', 200);
     }
 
-    public function like($id)
+    public function like($question_id, $id)
     {
         $answer = Answer::find($id);
 

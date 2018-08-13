@@ -19,9 +19,13 @@ Route::post('auth/logout', 'AuthController@logout');
 Route::get('auth/me', 'AuthController@me');
 
 Route::resource('qna', 'API\QNAController');
-Route::resource('answer', 'API\AnswerController');
-Route::post('answer/{answer}/like', 'API\AnswerController@like')->name('answer.like');
+
+Route::prefix('question/{question}')->group(function() {
+    Route::resource('answer', 'API\AnswerController');
+    Route::post('answer/{answer}/like', 'API\AnswerController@like')->name('answer.like');
+});
 
 Route::prefix('answer/{answer}')->group(function() {
     Route::resource('comment', 'API\CommentController');
+    Route::post('comment/{comment}/like', 'API\CommentController@like')->name('comment.like');
 });

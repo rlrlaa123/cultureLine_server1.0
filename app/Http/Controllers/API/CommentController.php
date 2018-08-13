@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Answer;
+use App\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Validator;
 
 class CommentController extends Controller
 {
@@ -36,9 +39,31 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'contents' => 'required',
+        ]);
+
+        $validator->after(function () {
+        });
+
+        if ($validator->fails()) {
+            return response($validator->errors());
+        }
+
+        $comment = new Comment;
+
+        $answer = Answer::find($id);
+
+        $comment->answer_id = $answer->id;
+        $comment->author_id = $answer->author_id;
+
+        $comment->contents = $request->contents;
+
+        $comment->save();
+
+        return response('success', 200);
     }
 
     /**
@@ -70,9 +95,24 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $answer_id, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'contents' => 'required',
+        ]);
+
+        $validator->after(function () {
+        });
+
+        if ($validator->fails()) {
+            return response($validator->errors());
+        }
+
+        Comment::where('id', $id)->update([
+            'contents' => $request->contents,
+        ]);
+
+        return response('success', 200);
     }
 
     /**
@@ -81,8 +121,23 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($answer_id, $id)
     {
-        //
+        $comment = Comment::find($id);
+
+        $comment->delete();
+
+        return response('success', 200);
+    }
+
+    public function like($answer_id, $id)
+    {
+        $comment = Comment::find($id);
+
+        $comment->like = $comment->like + 1;
+
+        $comment->save();
+
+        return response('success', 200);
     }
 }

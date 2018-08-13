@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Answer;
 use App\Category;
+use App\Comment;
 use App\Question;
 use App\User;
 use Illuminate\Http\Request;
@@ -29,6 +30,8 @@ class QNAController extends Controller
 
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
+
+                $answer->comments = Comment::where('answer_id', $answer->id)->get();
             }
 
             $question->answers = $answers;
@@ -78,9 +81,10 @@ class QNAController extends Controller
 
         $question->save();
 
-        return response()->json([
-            'message' => 'success',
-        ]);
+        $question->answers = [];
+        $question->author = $question->author->name;
+
+        return response($question);
     }
 
     /**
