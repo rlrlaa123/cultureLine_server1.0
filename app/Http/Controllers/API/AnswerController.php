@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Answer;
-use App\Category;
 use App\Question;
-use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 
-class QNAController extends Controller
+class AnswerController extends Controller
 {
     public function __construct( ) {
         $this->middleware('jwt.auth');
@@ -22,20 +20,7 @@ class QNAController extends Controller
      */
     public function index()
     {
-        $questions = Question::paginate(10);
-
-        foreach ($questions as $question) {
-            $answers = Answer::where('question_id', $question->id)->get();
-
-            foreach ($answers as $answer) {
-                $answer->author = $answer->author->name;
-            }
-
-            $question->answers = $answers;
-            $question->author = $question->author->name;
-        }
-
-        return response($questions, 200);
+        //
     }
 
     /**
@@ -45,6 +30,7 @@ class QNAController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
@@ -56,8 +42,7 @@ class QNAController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'category' => 'required',
-            'title' => 'required',
+            'question_id' => 'required',
             'contents' => 'required',
         ]);
 
@@ -68,19 +53,16 @@ class QNAController extends Controller
             return response($validator->errors());
         }
 
-        $question = new Question;
+        $answer = new Answer;
 
-        $question->category_id = Category::where('name', $request->category)->first()->id;
-        $question->author_id = auth()->user()->id;
+        $answer->question_id = Question::where('id', $request->question_id)->first()->id;
+        $answer->author_id = auth()->user()->id;
 
-        $question->title = $request->title;
-        $question->contents = $request->contents;
+        $answer->contents = $request->contents;
 
-        $question->save();
+        $answer->save();
 
-        return response()->json([
-            'message' => 'success',
-        ]);
+        return response('success', 200);
     }
 
     /**
@@ -91,18 +73,7 @@ class QNAController extends Controller
      */
     public function show($id)
     {
-        $question = Question::find($id);
-
-        $answers = Answer::where('question_id', $question)->get();
-
-        foreach ($answers as $answer) {
-            $answer->author = $answer->author->name;
-        }
-
-        $question->answers = $answers;
-        $question->author = $question->author->name;
-
-        return response($question, 200);
+        //
     }
 
     /**
@@ -126,7 +97,6 @@ class QNAController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
             'contents' => 'required',
         ]);
 
@@ -137,8 +107,7 @@ class QNAController extends Controller
             return response($validator->errors());
         }
 
-        Question::where('id', $id)->update([
-            'title' => $request->title,
+        Answer::where('id', $id)->update([
             'contents' => $request->contents,
         ]);
 
@@ -153,9 +122,20 @@ class QNAController extends Controller
      */
     public function destroy($id)
     {
-        $question = Question::find($id);
+        $answer = Answer::find($id);
 
-        $question->delete();
+        $answer->delete();
+
+        return response('success', 200);
+    }
+
+    public function like($id)
+    {
+        $answer = Answer::find($id);
+
+        $answer->like = $answer->like + 1;
+
+        $answer->save();
 
         return response('success', 200);
     }
