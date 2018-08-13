@@ -10,6 +10,9 @@ use App\Http\Controllers\Controller;
 
 class QNAController extends Controller
 {
+    public function __construct( ) {
+        $this->middleware('jwt.auth');
+    }
     /**
      * Display a listing of the resource.
      *
