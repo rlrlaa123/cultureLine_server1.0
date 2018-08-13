@@ -7,6 +7,7 @@ use App\Question;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Validator;
 
 class QNAController extends Controller
 {
@@ -47,7 +48,6 @@ class QNAController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -58,7 +58,32 @@ class QNAController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'category' => 'required',
+            'title' => 'required',
+            'contents' => 'required',
+        ]);
+
+        $validator->after(function () {
+        });
+
+        if ($validator->fails()) {
+            return response($validator->errors());
+        }
+
+        $user = new User;
+
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->name = $request->name;
+        $user->stu_id = $request->stu_id;
+        $user->major = $request->major;
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'registered',
+        ]);
     }
 
     /**

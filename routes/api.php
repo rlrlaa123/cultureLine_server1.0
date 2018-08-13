@@ -19,8 +19,7 @@ Route::resource('qna', 'API\QNAController');
 Route::post('auth/login', 'AuthController@login');
 Route::post('auth/register', 'AuthController@register');
 Route::post('auth/logout', 'AuthController@logout');
-Route::post('auth/refresh', 'AuthController@refresh');
-Route::post('me', 'AuthController@me');
+Route::get('auth/me', 'AuthController@me');
 //Route::post('auth/refresh', [
 //    'middleware' => 'jwt.refresh',
 //    function($token) {
