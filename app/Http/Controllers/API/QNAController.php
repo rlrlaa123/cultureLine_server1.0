@@ -4,11 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Answer;
 use App\Category;
+use App\CategoryQuestion;
 use App\Comment;
 use App\Question;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class QNAController extends Controller
@@ -26,6 +28,23 @@ class QNAController extends Controller
         $questions = Question::orderby('updated_at', 'desc')->paginate(10);
 
         foreach ($questions as $question) {
+            $categories = DB::table('category_question')
+                ->select('category_id')
+                ->where('question_id', $question->id)
+                ->get();
+
+            $cate = '';
+
+            foreach ($categories as $i => $category) {
+                if ($i + 1 == count($categories)) {
+                    $cate = $cate . $category->category_id;
+                } else {
+                    $cate = $cate . $category->category_id . ',';
+                }
+            }
+
+            $question->categories = $cate;
+
             $answers = Answer::where('question_id', $question->id)->orderby('updated_at','desc')->get();
 
             foreach ($answers as $answer) {
@@ -59,7 +78,7 @@ class QNAController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'category' => 'required',
+            'categories' => 'required',
             'title' => 'required',
             'contents' => 'required',
         ]);
@@ -71,9 +90,10 @@ class QNAController extends Controller
             return response($validator->errors());
         }
 
+        $categories = explode(',', $request->categories);
+
         $question = new Question;
 
-        $question->category_id = Category::where('name', $request->category)->first()->id;
         $question->author_id = auth()->user()->id;
 
         $question->title = $request->title;
@@ -81,8 +101,21 @@ class QNAController extends Controller
 
         $question->save();
 
+        $cate = '';
+
+        foreach ($categories as $i => $category) {
+            $question->categories()->attach($category);
+
+            if ($i + 1 == count($categories)) {
+                $cate = $cate . $category;
+            } else {
+                $cate = $cate . $category . ',';
+            }
+        }
+
         $question->answers = [];
         $question->author = $question->author->name;
+        $question->categories = $cate;
 
         return response($question);
     }
@@ -105,6 +138,21 @@ class QNAController extends Controller
 
         $question->answers = $answers;
         $question->author = $question->author->name;
+
+        $categories = DB::table('category_question')
+            ->select('category_id')
+            ->where('question_id', $question->id)
+            ->get();
+
+        $cate = '';
+
+        foreach ($categories as $i => $category) {
+            if ($i + 1 == count($categories)) {
+                $cate = $cate . $category->category_id;
+            } else {
+                $cate = $cate . $category->category_id . ',';
+            }
+        }
 
         return response($question, 200);
     }
@@ -146,7 +194,33 @@ class QNAController extends Controller
             'contents' => $request->contents,
         ]);
 
-        return response('success', 200);
+        $question = Question::find($id);
+
+        $answers = Answer::where('question_id', $question)->get();
+
+        foreach ($answers as $answer) {
+            $answer->author = $answer->author->name;
+        }
+
+        $question->answers = $answers;
+        $question->author = $question->author->name;
+
+        $categories = DB::table('category_question')
+            ->select('category_id')
+            ->where('question_id', $question->id)
+            ->get();
+
+        $cate = '';
+
+        foreach ($categories as $i => $category) {
+            if ($i + 1 == count($categories)) {
+                $cate = $cate . $category->category_id;
+            } else {
+                $cate = $cate . $category->category_id . ',';
+            }
+        }
+
+        return response($question, 200);
     }
 
     /**

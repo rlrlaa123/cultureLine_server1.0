@@ -6,6 +6,7 @@ use App\Answer;
 use App\Question;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
 use Validator;
 
 class AnswerController extends Controller
@@ -54,10 +55,16 @@ class AnswerController extends Controller
 
         $answer = new Answer;
 
-        $answer->question_id = Question::where('id', $id)->first()->id;
+        $question = Question::find($id);
+
+        $answer->question_id = $question->id;
         $answer->author_id = auth()->user()->id;
 
         $answer->contents = $request->contents;
+
+        $question->updated_at = Carbon::now();
+
+        $question->save();
 
         $answer->save();
 

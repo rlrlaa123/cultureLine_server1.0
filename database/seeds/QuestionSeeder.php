@@ -16,7 +16,6 @@ class QuestionSeeder extends Seeder
     {
         $question = new Question;
 
-        $question->category_id = Category::where('name', '카테고리1')->first()->id;
         $question->author_id = User::where('name', '김동현')->first()->id;
 
         $question->title = '문과계열이 네이버 카카오 들어가려면 스펙 어느정도 돼야할까요?';
@@ -24,9 +23,10 @@ class QuestionSeeder extends Seeder
 
         $question->save();
 
+        $question->categories()->attach(Category::where('name', '기획')->first());
+
         $question = new Question;
 
-        $question->category_id = Category::where('name', '카테고리3')->first()->id;
         $question->author_id = User::where('name', '김동현')->first()->id;
 
         $question->title = 'UX분야, 서비스 기획 관련 분야 취업 질문드리고 싶습니다.';
@@ -34,14 +34,18 @@ class QuestionSeeder extends Seeder
 
         $question->save();
 
+        $question->categories()->attach(Category::where('name', '디자인')->first());
+        $question->categories()->attach(Category::where('name', '기획')->first());
+
         $question = new Question;
 
-        $question->category_id = Category::where('name', '카테고리2')->first()->id;
         $question->author_id = User::where('name', '김동현')->first()->id;
 
         $question->title = 'IT 직무 재취업 희망';
         $question->contents = '중소기업에서 개발자로 1년반이상 근무중인 25세 여성입니다. 학교는 서울 하위권 4년제 컴공 졸업 3.5/4.3 입니다. 영어점수는 없고, 자격증은 ocjp 하나 있습니다. 현재 대기업혁력으로 tv 검색 및 추천서비스 관련업무중입니다. 직무 관련새선, 코딩실력이 띄어난 것은 아니지만 제게 주어진 개발은';
 
         $question->save();
+
+        $question->categories()->attach(Category::where('name', '기타')->first());
     }
 }

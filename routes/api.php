@@ -18,6 +18,8 @@ Route::post('auth/register', 'AuthController@register');
 Route::post('auth/logout', 'AuthController@logout');
 Route::get('auth/me', 'AuthController@me');
 
+Route::get('category', 'API\CategoryController@index');
+
 Route::resource('qna', 'API\QNAController');
 
 Route::prefix('question/{question}')->group(function() {

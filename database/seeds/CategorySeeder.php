@@ -13,17 +13,27 @@ class CategorySeeder extends Seeder
     public function run()
     {
         $category = new Category;
-        $category->name = '카테고리1';
+        $category->name = '기획';
 
         $category->save();
 
         $category = new Category;
-        $category->name = '카테고리2';
+        $category->name = '경영';
 
         $category->save();
 
         $category = new Category;
-        $category->name = '카테고리3';
+        $category->name = '디자인';
+
+        $category->save();
+
+        $category = new Category;
+        $category->name = '마케팅';
+
+        $category->save();
+
+        $category = new Category;
+        $category->name = '기타';
 
         $category->save();
     }
