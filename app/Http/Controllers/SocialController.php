@@ -14,13 +14,18 @@ class SocialController extends Controller
         $user = User::where('provider_user_id', $request->token)->first();
 
         if($user) {
-            $credentials = [$request->email, Hash::make('secret')]);
+            $credentials = [$request->email, Hash::make('secret')];
 
             if (! $token = auth()->attempt($credentials)) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
 
-            return $this->respondWithToken($token);
+            return response()->json([
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60,
+                'user' => auth()->user(),
+            ]);
         }
         else {
             $user = new User;
@@ -32,17 +37,17 @@ class SocialController extends Controller
 
             $token = auth()->attempt($credentials);
 
-            return $this->respondWithToken($token);
+            return response()->json([
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60,
+                'user' => null,
+            ]);
         }
     }
 
     protected function respondWithToken($token)
     {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-//            'user' => auth()->user(),
-        ]);
+
     }
 }
