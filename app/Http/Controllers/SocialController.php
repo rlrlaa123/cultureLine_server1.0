@@ -10,7 +10,7 @@ use Laravel\Socialite\Facades\Socialite;
 class SocialController extends Controller
 {
     public function __construct( ) {
-        $this->middleware('jwt.auth', ['except' => ['socialRegister']]);
+        $this->middleware('jwt.auth', ['except' => ['socialLogin']]);
     }
 
     public function socialLogin(Request $request, $provider)
