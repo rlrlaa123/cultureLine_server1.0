@@ -9,7 +9,11 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
-    public function redirectToProvider(Request $request, $provider)
+    public function __construct( ) {
+        $this->middleware('jwt.auth', ['except' => ['socialRegister']]);
+    }
+
+    public function socialLogin(Request $request, $provider)
     {
         $user = User::where('provider_user_id', $request->token)->first();
 
@@ -58,8 +62,29 @@ class SocialController extends Controller
         }
     }
 
-    protected function respondWithToken($token)
+    protected function socialRegister(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'stu_id' => 'required',
+            'major' => 'required',
+        ]);
 
+        $validator->after(function () {
+        });
+
+        if ($validator->fails()) {
+            return response($validator->errors());
+        }
+
+        $user = auth()->user();
+
+        $user->name = $request->name;
+        $user->stu_id = $request->stu_id;
+        $user->major = $request->major;
+
+        $user->save();
+
+        return response(auth()->user(), 200);
     }
 }
