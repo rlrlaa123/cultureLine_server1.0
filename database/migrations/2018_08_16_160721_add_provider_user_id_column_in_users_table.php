@@ -14,7 +14,7 @@ class AddProviderUserIdColumnInUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('provider_user_id')->nullable();
+            $table->longText('provider_user_id')->nullable();
             $table->string('password')->nullable()->change();
             $table->string('name')->nullable()->change();
             $table->string('stu_id')->nullable()->change();
