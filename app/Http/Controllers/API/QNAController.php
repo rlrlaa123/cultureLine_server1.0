@@ -23,15 +23,15 @@ class QNAController extends Controller
      */
     public function index()
     {
-        $questions = Question::paginate(10);
+        $questions = Question::orderby('updated_at', 'desc')->paginate(10);
 
         foreach ($questions as $question) {
-            $answers = Answer::where('question_id', $question->id)->get();
+            $answers = Answer::where('question_id', $question->id)->orderby('updated_at','desc')->get();
 
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
 
-                $answer->comments = Comment::where('answer_id', $answer->id)->get();
+                $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
             }
 
             $question->answers = $answers;
