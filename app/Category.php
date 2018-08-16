@@ -10,6 +10,8 @@ class Category extends Model
         'name',
     ];
 
+    public $timestamps = false;
+
     public function questions()
     {
         return $this->belongsToMany(Question::class);
