@@ -13,21 +13,30 @@ class SocialController extends Controller
     {
         $user = User::where('provider_user_id', $request->token)->first();
 
-        if($user) {
+        if ($user) {
             $credentials['email'] = $request->email;
             $credentials['password'] = 'social';
-            if (! $token = auth()->attempt($credentials)) {
+            if (!$token = auth()->attempt($credentials)) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
 
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60,
-                'user' => auth()->user(),
-            ]);
-        }
-        else {
+            if ($user->name == null || $user->stu_id || $user->major ) {
+                return response()->json([
+                    'access_token' => $token,
+                    'token_type' => 'bearer',
+                    'expires_in' => auth()->factory()->getTTL() * 60,
+                    'user' => null,
+                ]);
+            }
+            else {
+                return response()->json([
+                    'access_token' => $token,
+                    'token_type' => 'bearer',
+                    'expires_in' => auth()->factory()->getTTL() * 60,
+                    'user' => auth()->user(),
+                ]);
+            }
+        } else {
             $user = new User;
             $user->email = $request->email;
             $user->password = Hash::make('social');
