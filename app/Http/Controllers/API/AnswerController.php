@@ -61,7 +61,10 @@ class AnswerController extends Controller
 
         $answer->save();
 
-        return response('success', 200);
+        $answer->like = 0;
+        $answer->author = auth()->user();
+
+        return response($answer, 200);
     }
 
     /**
