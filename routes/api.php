@@ -18,7 +18,7 @@ Route::post('auth/register', 'AuthController@register');
 Route::post('auth/logout', 'AuthController@logout');
 Route::get('auth/me', 'AuthController@me');
 
-Route::get('social/{provider}', 'SocialController@redirectToProvider')->name('social.login');
+Route::post('social/{provider}', 'SocialController@redirectToProvider')->name('social.login');
 
 Route::get('category', 'API\CategoryController@index')->name('category.index');
 
