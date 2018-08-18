@@ -24,6 +24,7 @@ Route::post('social/register', 'SocialController@socialRegister')->name('social.
 Route::get('category', 'API\CategoryController@index')->name('category.index');
 
 Route::resource('qna', 'API\QNAController');
+Route::get('category/search/{category_id}', 'API\QNAController@categorySearch')->name('category.search');
 
 Route::prefix('question/{question}')->group(function() {
     Route::resource('answer', 'API\AnswerController');

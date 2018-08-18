@@ -237,4 +237,43 @@ class QNAController extends Controller
 
         return response('success', 200);
     }
+
+    public function categorySearch($category_id)
+    {
+        $category = Category::find($category_id);
+
+        $questions =  $category->questions()->orderby('updated_at', 'desc')->paginate(10);
+
+        foreach ($questions as $question) {
+            $categories = DB::table('category_question')
+                ->select('category_id')
+                ->where('question_id', $question->id)
+                ->get();
+
+            $cate = '';
+
+            foreach ($categories as $i => $category) {
+                if ($i + 1 == count($categories)) {
+                    $cate = $cate . $category->category_id;
+                } else {
+                    $cate = $cate . $category->category_id . ',';
+                }
+            }
+
+            $question->categories = $cate;
+
+            $answers = Answer::where('question_id', $question->id)->orderby('updated_at','desc')->get();
+
+            foreach ($answers as $answer) {
+                $answer->author = $answer->author->name;
+
+                $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
+            }
+
+            $question->answers = $answers;
+            $question->author = $question->author->name;
+        }
+
+        return response($questions, 200);
+    }
 }
