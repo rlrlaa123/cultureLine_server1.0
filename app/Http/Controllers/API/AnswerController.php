@@ -148,4 +148,15 @@ class AnswerController extends Controller
 
         return response('success', 200);
     }
+
+    public function dislike($question_id, $id)
+    {
+        $answer = Answer::find($id);
+
+        $answer->like = $answer->like - 1;
+
+        $answer->save();
+
+        return response('success', 200);
+    }
 }

@@ -140,4 +140,15 @@ class CommentController extends Controller
 
         return response('success', 200);
     }
+
+    public function dislike($answer_id, $id)
+    {
+        $comment = Comment::find($id);
+
+        $comment->like = $comment->like + 1;
+
+        $comment->save();
+
+        return response('success', 200);
+    }
 }
