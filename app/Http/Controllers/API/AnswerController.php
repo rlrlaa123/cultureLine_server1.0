@@ -142,20 +142,17 @@ class AnswerController extends Controller
     {
         $answer = Answer::find($id);
 
-        $answer->like = $answer->like + 1;
+        if (!$answer->liked) {
+            $answer->like = $answer->like + 1;
+            $answer->liked = true;
 
-        $answer->save();
+            $answer->save();
+        } else {
+            $answer->like = $answer->like - 1;
+            $answer->liked = false;
 
-        return response('success', 200);
-    }
-
-    public function dislike($question_id, $id)
-    {
-        $answer = Answer::find($id);
-
-        $answer->like = $answer->like - 1;
-
-        $answer->save();
+            $answer->save();
+        }
 
         return response('success', 200);
     }

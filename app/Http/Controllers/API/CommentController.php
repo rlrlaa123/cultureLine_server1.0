@@ -134,9 +134,17 @@ class CommentController extends Controller
     {
         $comment = Comment::find($id);
 
-        $comment->like = $comment->like + 1;
+        if (!$comment->liked) {
+            $comment->like = $comment->like + 1;
+            $comment->liked = true;
 
-        $comment->save();
+            $comment->save();
+        } else {
+            $comment->like = $comment->like - 1;
+            $comment->liked = false;
+
+            $comment->save();
+        }
 
         return response('success', 200);
     }

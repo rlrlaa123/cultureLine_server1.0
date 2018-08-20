@@ -29,11 +29,9 @@ Route::get('category/search/{category_id}', 'API\QNAController@categorySearch')-
 Route::prefix('question/{question}')->group(function() {
     Route::resource('answer', 'API\AnswerController');
     Route::post('answer/{answer}/like', 'API\AnswerController@like')->name('answer.like');
-    Route::post('answer/{answer}/dislike', 'API\AnswerController@dislike')->name('answer.dislike');
 });
 
 Route::prefix('answer/{answer}')->group(function() {
     Route::resource('comment', 'API\CommentController');
     Route::post('comment/{comment}/like', 'API\CommentController@like')->name('comment.like');
-    Route::post('comment/{comment}/dislike', 'API\CommentController@dislike')->name('comment.dislike');
 });
