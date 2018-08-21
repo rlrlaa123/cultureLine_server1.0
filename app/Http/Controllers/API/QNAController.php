@@ -220,6 +220,8 @@ class QNAController extends Controller
             }
         }
 
+        $question->categories = $cate;
+
         return response($question, 200);
     }
 

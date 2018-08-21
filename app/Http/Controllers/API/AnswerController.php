@@ -70,6 +70,7 @@ class AnswerController extends Controller
 
         $answer->like = 0;
         $answer->author = auth()->user();
+        $answer->liked = 0;
 
         return response($answer, 200);
     }
