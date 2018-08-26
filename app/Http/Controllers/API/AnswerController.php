@@ -149,10 +149,12 @@ class AnswerController extends Controller
     public function like($question_id, $id)
     {
         $answer = Answer::find($id);
-        $like = DB::table('answer_like')->where('user_id', auth()->user()->id);
+        $like = DB::table('answer_like')->where([
+            ['user_id', '=', auth()->user()->id],
+            ['answer_id', '=', $id],
+        ]);
 
         if ($like->first()) {
-//            return json_encode($like);
             $like->delete();
             $answer->like -= 1;
             $answer->save();
