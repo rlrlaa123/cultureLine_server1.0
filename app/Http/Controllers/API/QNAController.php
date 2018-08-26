@@ -45,7 +45,7 @@ class QNAController extends Controller
 
             $question->categories = $cate;
 
-            $answers = Answer::where('question_id', $question->id)->orderby('updated_at','desc')->get();
+            $answers = Answer::where('question_id', $question->id)->orderby('created_at')->get();
 
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
