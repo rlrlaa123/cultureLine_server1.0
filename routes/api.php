@@ -24,11 +24,13 @@ Route::post('social/register', 'SocialController@socialRegister')->name('social.
 Route::get('category', 'API\CategoryController@index')->name('category.index');
 
 Route::resource('qna', 'API\QNAController');
+Route::get('auth/question', 'API\QNAController@myQuestion')->name('question.myQuestion');
 Route::get('category/search/{category_id}', 'API\QNAController@categorySearch')->name('category.search');
 
 Route::prefix('question/{question}')->group(function() {
     Route::resource('answer', 'API\AnswerController');
     Route::post('answer/{answer}/like', 'API\AnswerController@like')->name('answer.like');
+    Route::post('answer/{answer}/select', 'API\AnswerController@select')->name('answer.select');
 });
 
 Route::prefix('answer/{answer}')->group(function() {

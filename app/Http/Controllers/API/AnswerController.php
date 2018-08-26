@@ -157,4 +157,30 @@ class AnswerController extends Controller
 
         return response('success', 200);
     }
+
+    public function select($question_id, $id)
+    {
+        $answer = Answer::find($id);
+
+        if (!$answer->selected) {
+            $answer->selected = true;
+            $answer->save();
+
+            $question = Question::find($answer->question_id);
+
+            $question->selected = true;
+            $question->save();
+        }
+        else {
+            $answer->selected = false;
+            $answer->save();
+
+            $question = Question::find($answer->question_id);
+
+            $question->selected = false;
+            $question->save();
+        }
+
+        return response('success', 200);
+    }
 }
