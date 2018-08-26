@@ -50,7 +50,7 @@ class QNAController extends Controller
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
 
-                $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
+                $answer->comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
             }
 
             $question->answers = $answers;
