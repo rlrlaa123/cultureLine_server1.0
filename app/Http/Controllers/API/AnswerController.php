@@ -7,6 +7,7 @@ use App\Question;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class AnswerController extends Controller
@@ -70,7 +71,13 @@ class AnswerController extends Controller
 
         $answer->like = 0;
         $answer->author = auth()->user();
-        $answer->liked = 0;
+
+        if (DB::table('answer_like')->where('user_id', auth()->user()->id)->first()) {
+            $answer->liked = 1;
+        }
+        else {
+            $answer->like = 0;
+        }
 
         return response($answer, 200);
     }
@@ -142,17 +149,23 @@ class AnswerController extends Controller
     public function like($question_id, $id)
     {
         $answer = Answer::find($id);
+        $like = DB::table('answer_like')->where('user_id', auth()->user()->id);
 
-        if (!$answer->liked) {
-            $answer->like = $answer->like + 1;
-            $answer->liked = true;
-
+        if ($like->first()) {
+//            return json_encode($like);
+            $like->delete();
+            $answer->like -= 1;
             $answer->save();
-        } else {
-            $answer->like = $answer->like - 1;
-            $answer->liked = false;
 
+        }
+        else {
+            $answer->like += 1;
             $answer->save();
+
+            DB::table('answer_like')->insert([
+                'user_id' => auth()->user()->id,
+                'answer_id' => $answer->id
+            ]);
         }
 
         return response('success', 200);
