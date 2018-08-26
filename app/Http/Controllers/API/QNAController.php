@@ -52,7 +52,10 @@ class QNAController extends Controller
 
                 $answer->comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
 
-                if (DB::table('answer_like')->where('user_id', auth()->user()->id)->first()) {
+                if (DB::table('answer_like')->where([
+                    ['user_id', '=', auth()->user()->id],
+                    ['answer_id', '=', $answer->id],
+                ])->first()) {
                         $answer->liked = 1;
                 }
                 else {
