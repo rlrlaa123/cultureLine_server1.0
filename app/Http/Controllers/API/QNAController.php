@@ -245,11 +245,28 @@ class QNAController extends Controller
         return response('success', 200);
     }
 
-    public function categorySearch($category_id)
+    public function categorySearch($id)
     {
-        $category = Category::find($category_id);
+        $category_ids = explode(',', $id);
 
-        $questions =  $category->questions()->orderby('updated_at', 'desc')->paginate(10);
+        $relationships = DB::table('category_question');
+        foreach ($category_ids as $category_id) {
+            $relationships->orWhere('category_id', '=', $category_id);
+        }
+
+        $question_ids = [];
+
+        foreach ($relationships->get() as $relationship) {
+            array_push($question_ids, $relationship->question_id);
+        }
+
+        $question_id_list = [];
+
+        foreach (array_unique($question_ids) as $question_id) {
+            array_push($question_id_list, $question_id);
+        }
+
+        $questions = Question::whereIn('id', $question_id_list)->orderby('updated_at', 'desc')->paginate(10);
 
         foreach ($questions as $question) {
             $categories = DB::table('category_question')
