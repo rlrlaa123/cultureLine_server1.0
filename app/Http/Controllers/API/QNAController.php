@@ -130,10 +130,12 @@ class QNAController extends Controller
     {
         $question = Question::find($id);
 
-        $answers = Answer::where('question_id', $question)->get();
+        $answers = Answer::where('question_id', $question->id)->get();
 
         foreach ($answers as $answer) {
             $answer->author = $answer->author->name;
+
+            $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
         }
 
         $question->answers = $answers;
@@ -195,6 +197,9 @@ class QNAController extends Controller
         ]);
 
         $question = Question::find($id);
+
+        DB::table('category_question')
+            ->where('question_id', $question->id)->get();
 
         $answers = Answer::where('question_id', $question)->get();
 
