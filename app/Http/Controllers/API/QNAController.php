@@ -201,7 +201,7 @@ class QNAController extends Controller
         DB::table('category_question')
             ->where('question_id', $question->id)->get();
 
-        $answers = Answer::where('question_id', $question)->get();
+        $answers = Answer::where('question_id', $question->id)->get();
 
         foreach ($answers as $answer) {
             $answer->author = $answer->author->name;
