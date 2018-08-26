@@ -239,6 +239,9 @@ class QNAController extends Controller
     public function destroy($id)
     {
         $question = Question::find($id);
+//        return $id;
+//        return DB::table('category_question')->where('question_id', $id)->get();
+        DB::table('category_question')->where('question_id', $id)->delete();
 
         $question->delete();
 
