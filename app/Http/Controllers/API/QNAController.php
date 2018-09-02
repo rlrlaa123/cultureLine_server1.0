@@ -344,6 +344,44 @@ class QNAController extends Controller
             return response($validator->errors());
         }
 
+        $questions = Question::where('title', 'LIKE', "%{$request->search}%")
+            ->orWhere('contents', 'LIKE', "%{$request->search}%")
+            ->get();
 
+        foreach ($questions as $question) {
+            $categories = DB::table('category_question')
+                ->select('category_id')
+                ->where('question_id', $question->id)
+                ->get();
+
+            $cate = '';
+
+            foreach ($categories as $i => $category) {
+                if ($i + 1 == count($categories)) {
+                    $cate = $cate . $category->category_id;
+                } else {
+                    $cate = $cate . $category->category_id . ',';
+                }
+            }
+
+            $question->categories = $cate;
+
+            $answers = Answer::where('question_id', $question->id)->orderby('created_at')->get();
+
+            foreach ($answers as $answer) {
+                $answer->author = $answer->author->name;
+                $comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
+                foreach ($comments as $comment) {
+                    $comment->author = $comment->author->name;
+                }
+                $answer->comments = $comments;
+                $answer->liked = $answer->liked();
+            }
+
+            $question->answers = $answers;
+            $question->author = $question->author->name;
+        }
+
+        return $questions;
     }
 }
