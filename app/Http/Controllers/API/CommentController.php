@@ -63,6 +63,8 @@ class CommentController extends Controller
 
         $comment->save();
 
+        $comment->author = auth()->user();
+
         return response($comment, 200);
     }
 
