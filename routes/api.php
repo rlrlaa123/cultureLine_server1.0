@@ -35,5 +35,4 @@ Route::prefix('question/{question}')->group(function() {
 
 Route::prefix('answer/{answer}')->group(function() {
     Route::resource('comment', 'API\CommentController');
-    Route::post('comment/{comment}/like', 'API\CommentController@like')->name('comment.like');
 });

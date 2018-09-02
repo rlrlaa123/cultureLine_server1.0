@@ -57,13 +57,13 @@ class CommentController extends Controller
         $answer = Answer::find($id);
 
         $comment->answer_id = $answer->id;
-        $comment->author_id = $answer->author_id;
+        $comment->author_id = auth()->user()->id;
 
         $comment->contents = $request->contents;
 
         $comment->save();
 
-        return response('success', 200);
+        return response($comment, 200);
     }
 
     /**
@@ -126,36 +126,6 @@ class CommentController extends Controller
         $comment = Comment::find($id);
 
         $comment->delete();
-
-        return response('success', 200);
-    }
-
-    public function like($answer_id, $id)
-    {
-        $comment = Comment::find($id);
-
-        if (!$comment->liked) {
-            $comment->like = $comment->like + 1;
-            $comment->liked = true;
-
-            $comment->save();
-        } else {
-            $comment->like = $comment->like - 1;
-            $comment->liked = false;
-
-            $comment->save();
-        }
-
-        return response('success', 200);
-    }
-
-    public function dislike($answer_id, $id)
-    {
-        $comment = Comment::find($id);
-
-        $comment->like = $comment->like + 1;
-
-        $comment->save();
 
         return response('success', 200);
     }

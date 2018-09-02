@@ -49,7 +49,6 @@ class QNAController extends Controller
 
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
-
                 $answer->comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
                 $answer->liked = $answer->liked();
             }
@@ -129,35 +128,6 @@ class QNAController extends Controller
      */
     public function show($id)
     {
-        $question = Question::find($id);
-
-        $answers = Answer::where('question_id', $question->id)->get();
-
-        foreach ($answers as $answer) {
-            $answer->author = $answer->author->name;
-            $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
-            $answer->liked = $answer->liked();
-        }
-
-        $question->answers = $answers;
-        $question->author = $question->author->name;
-
-        $categories = DB::table('category_question')
-            ->select('category_id')
-            ->where('question_id', $question->id)
-            ->get();
-
-        $cate = '';
-
-        foreach ($categories as $i => $category) {
-            if ($i + 1 == count($categories)) {
-                $cate = $cate . $category->category_id;
-            } else {
-                $cate = $cate . $category->category_id . ',';
-            }
-        }
-
-        return response($question, 200);
     }
 
     /**
