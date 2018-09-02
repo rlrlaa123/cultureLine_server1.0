@@ -51,16 +51,7 @@ class QNAController extends Controller
                 $answer->author = $answer->author->name;
 
                 $answer->comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
-
-                if (DB::table('answer_like')->where([
-                    ['user_id', '=', auth()->user()->id],
-                    ['answer_id', '=', $answer->id],
-                ])->first()) {
-                        $answer->liked = 1;
-                }
-                else {
-                    $answer->liked = 0;
-                }
+                $answer->liked = $answer->liked();
             }
 
             $question->answers = $answers;
@@ -144,15 +135,8 @@ class QNAController extends Controller
 
         foreach ($answers as $answer) {
             $answer->author = $answer->author->name;
-
             $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
-
-            if (DB::table('answer_like')->where('user_id', auth()->user()->id)->first()) {
-                $answer->liked = 1;
-            }
-            else {
-                $answer->liked = 0;
-            }
+            $answer->liked = $answer->liked();
         }
 
         $question->answers = $answers;
@@ -222,15 +206,8 @@ class QNAController extends Controller
 
         foreach ($answers as $answer) {
             $answer->author = $answer->author->name;
-
             $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
-
-            if (DB::table('answer_like')->where('user_id', auth()->user()->id)->first()) {
-                $answer->liked = 1;
-            }
-            else {
-                $answer->liked = 0;
-            }
+            $answer->liked = $answer->liked();
         }
 
         $question->answers = $answers;
@@ -319,15 +296,8 @@ class QNAController extends Controller
 
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
-
                 $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
-
-                if (DB::table('answer_like')->where('user_id', auth()->user()->id)->first()) {
-                    $answer->liked = 1;
-                }
-                else {
-                    $answer->liked = 0;
-                }
+                $answer->liked = $answer->liked();
             }
 
             $question->answers = $answers;
@@ -363,15 +333,8 @@ class QNAController extends Controller
 
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
-
                 $answer->comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
-
-                if (DB::table('answer_like')->where('user_id', auth()->user()->id)->first()) {
-                    $answer->liked = 1;
-                }
-                else {
-                    $answer->liked = 0;
-                }
+                $answer->liked = $answer->liked();
             }
 
             $question->answers = $answers;

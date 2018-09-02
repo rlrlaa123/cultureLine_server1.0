@@ -72,13 +72,6 @@ class AnswerController extends Controller
         $answer->like = 0;
         $answer->author = auth()->user();
 
-        if (DB::table('answer_like')->where('user_id', auth()->user()->id)->first()) {
-            $answer->liked = 1;
-        }
-        else {
-            $answer->like = 0;
-        }
-
         return response($answer, 200);
     }
 
@@ -158,7 +151,6 @@ class AnswerController extends Controller
             $like->delete();
             $answer->like -= 1;
             $answer->save();
-
         }
         else {
             $answer->like += 1;

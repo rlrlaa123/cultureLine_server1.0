@@ -20,7 +20,6 @@ class AnswerSeeder extends Seeder
         $answer->author_id = User::where('name', '삼성SDS')->first()->id;
 
         $answer->contents = '토익점수 높네요. IT 기업에 관심있다면 전산하는 친구랑 같이 사이트를 만드는 프로젝트를 해보면 도움이 될듯합니다.';
-        $answer->like = 3;
 
         $answer->save();
 
@@ -30,7 +29,6 @@ class AnswerSeeder extends Seeder
         $answer->author_id = User::where('name', '한국청소년정책연구원')->first()->id;
 
         $answer->contents = '현재 네이버 합격자들의 평균 스펙은 1. 평균 학점 (85% 보유): 3.64점 2. 토익 보유자 평균 (36% 보유): 800점';
-        $answer->like = 2;
 
         $answer->save();
 
