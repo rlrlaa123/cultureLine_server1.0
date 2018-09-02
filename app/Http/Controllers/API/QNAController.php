@@ -116,6 +116,7 @@ class QNAController extends Controller
         $question->answers = [];
         $question->author = $question->author->name;
         $question->categories = $cate;
+        $question->selected = false;
 
         return response($question);
     }
