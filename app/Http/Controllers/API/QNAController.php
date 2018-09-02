@@ -49,7 +49,11 @@ class QNAController extends Controller
 
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
-                $answer->comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
+                $comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
+                foreach ($comments as $comment) {
+                    $comment->author = $comment->author->name;
+                }
+                $answer->comments = $comments;
                 $answer->liked = $answer->liked();
             }
 
@@ -177,7 +181,11 @@ class QNAController extends Controller
 
         foreach ($answers as $answer) {
             $answer->author = $answer->author->name;
-            $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
+            $comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
+            foreach ($comments as $comment) {
+                $comment->author = $comment->author->name;
+            }
+            $answer->comments = $comments;
             $answer->liked = $answer->liked();
         }
 
@@ -267,7 +275,11 @@ class QNAController extends Controller
 
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
-                $answer->comments = Comment::where('answer_id', $answer->id)->orderby('updated_at', 'desc')->get();
+                $comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
+                foreach ($comments as $comment) {
+                    $comment->author = $comment->author->name;
+                }
+                $answer->comments = $comments;
                 $answer->liked = $answer->liked();
             }
 
@@ -304,7 +316,11 @@ class QNAController extends Controller
 
             foreach ($answers as $answer) {
                 $answer->author = $answer->author->name;
-                $answer->comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
+                $comments = Comment::where('answer_id', $answer->id)->orderby('created_at')->get();
+                foreach ($comments as $comment) {
+                    $comment->author = $comment->author->name;
+                }
+                $answer->comments = $comments;
                 $answer->liked = $answer->liked();
             }
 
