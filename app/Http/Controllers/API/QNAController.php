@@ -120,7 +120,7 @@ class QNAController extends Controller
         $question->answers = [];
         $question->author = $question->author->name;
         $question->categories = $cate;
-        $question->selected = false;
+        $question->selected = 0;
 
         return response($question);
     }
@@ -329,5 +329,21 @@ class QNAController extends Controller
         }
 
         return response($questions, 200);
+    }
+
+    public function search(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'search' => 'required',
+        ]);
+
+        $validator->after(function () {
+        });
+
+        if ($validator->fails()) {
+            return response($validator->errors());
+        }
+
+
     }
 }

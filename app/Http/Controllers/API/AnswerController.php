@@ -71,7 +71,6 @@ class AnswerController extends Controller
 
         $answer->like = 0;
         $answer->author = auth()->user();
-        $answer->selected = false;
 
         return response($answer, 200);
     }

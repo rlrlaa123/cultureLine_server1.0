@@ -36,3 +36,5 @@ Route::prefix('question/{question}')->group(function() {
 Route::prefix('answer/{answer}')->group(function() {
     Route::resource('comment', 'API\CommentController');
 });
+
+Route::post('search', 'API\QNAController@search');
