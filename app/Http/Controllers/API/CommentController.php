@@ -114,7 +114,11 @@ class CommentController extends Controller
             'contents' => $request->contents,
         ]);
 
-        return response('success', 200);
+        $comment = Comment::find($id);
+
+        $comment->author = auth()->user();
+
+        return response($comment, 200);
     }
 
     /**
