@@ -38,3 +38,5 @@ Route::prefix('answer/{answer}')->group(function() {
 });
 
 Route::post('search', 'API\QNAController@search');
+
+Route::post('notification', 'API\NotificationController@postToken');

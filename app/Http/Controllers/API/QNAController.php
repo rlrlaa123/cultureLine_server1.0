@@ -347,7 +347,7 @@ class QNAController extends Controller
         $questions = Question::where('title', 'LIKE', "%{$request->search}%")
             ->orWhere('contents', 'LIKE', "%{$request->search}%")
             ->get();
-
+        
         foreach ($questions as $question) {
             $categories = DB::table('category_question')
                 ->select('category_id')
