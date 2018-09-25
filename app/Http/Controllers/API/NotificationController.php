@@ -47,7 +47,7 @@ class NotificationController extends Controller
     {
         $client = new \GuzzleHttp\Client;
 
-        $result = $client->request('POST', 'http://fcm.googleapis.com/fcm/send',
+        $result = $client->post('http://fcm.googleapis.com/fcm/send',
             [
                 'headers' => [
                     'Authorization' => 'key=AAAAYarihTU:APA91bGbZ0OBbQDKFFoP1EZ9_Xr6vubkyDjfXJSGj_A5kgXAa5K4Za4aPvM5HhqOoTjzZehmEl58udqEGdH-DJ7m5USJgcjloi4RB8U3Lx0WW4F11S-X3S3HYJ7aav1D2DATb7BdKtNg',
