@@ -30,10 +30,12 @@ class NotificationController extends Controller
     {
         $tokenList = TestUser::all();
 
-        $tokens = [];
+        $tokens = array();
 
-        for ($i = 0; $i < count($tokenList); $i++) {
-            array_push($tokens, $tokenList[$i]->token);
+        if (count($tokenList) > 0 ) {
+            foreach ($tokenList as $token) {
+                array_push($tokens, $token->token);
+            }
         }
 
         $message = array("message" => "FCM PUSH NOTIFICATION");
@@ -48,7 +50,7 @@ class NotificationController extends Controller
         $result = $client->request('POST', 'http://fcm.googleapis.com/fcm/send',
             [
                 'headers' => [
-                    'Authorization' => 'AAAAYarihTU:APA91bGbZ0OBbQDKFFoP1EZ9_Xr6vubkyDjfXJSGj_A5kgXAa5K4Za4aPvM5HhqOoTjzZehmEl58udqEGdH-DJ7m5USJgcjloi4RB8U3Lx0WW4F11S-X3S3HYJ7aav1D2DATb7BdKtNg',
+                    'Authorization' => 'key=AAAAYarihTU:APA91bGbZ0OBbQDKFFoP1EZ9_Xr6vubkyDjfXJSGj_A5kgXAa5K4Za4aPvM5HhqOoTjzZehmEl58udqEGdH-DJ7m5USJgcjloi4RB8U3Lx0WW4F11S-X3S3HYJ7aav1D2DATb7BdKtNg',
                     'Content-Type' => 'application/json',
                 ],
                 'form_params' => [
