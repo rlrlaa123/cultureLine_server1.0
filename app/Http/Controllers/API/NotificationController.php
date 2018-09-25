@@ -45,21 +45,25 @@ class NotificationController extends Controller
 
     public function sendToFirebase($tokens, $message)
     {
-        $client = new \GuzzleHttp\Client;
+        $client = new \GuzzleHttp\Client([
+            'base_uri' => 'http://fcm.googleapis.com',
+        ]);
 
-        $result = $client->post('http://fcm.googleapis.com/fcm/send',
+        $result = $client->post('fcm/send',
             [
+                'debug' => TRUE,
                 'headers' => [
-                    'Authorization' => 'key=AAAAYarihTU:APA91bGbZ0OBbQDKFFoP1EZ9_Xr6vubkyDjfXJSGj_A5kgXAa5K4Za4aPvM5HhqOoTjzZehmEl58udqEGdH-DJ7m5USJgcjloi4RB8U3Lx0WW4F11S-X3S3HYJ7aav1D2DATb7BdKtNg',
+                    'Authorization' => 'key=AAAAYarihTU:APA91bHRDdpz_7pUe6cCjVw_-Kpq3gyNoV_sncd41TtLecBp23oYXlS35udmbiFuDoS1VTdWPEXb9WIzS7j4CanlWSf1m_dpyCRdu-fMHzLwsUElb4ohEwfmiS4gYnurLVXhDN33srRX',
                     'Content-Type' => 'application/json',
                 ],
                 'form_params' => [
                     'registration_ids' => $tokens,
-                    'data' => $message
+                    'data' => $message,
                 ]
             ]
         );
 
-        return $result;
+
+        return $result->getBody();
     }
 }
