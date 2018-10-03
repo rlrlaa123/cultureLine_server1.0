@@ -292,7 +292,7 @@ class QNAController extends Controller
 
     public function myQuestion()
     {
-        $questions = Question::where('author_id', auth()->user()->id)->orderby('selected')->orderby('updated_at')->get();
+        $questions = Question::where('author_id', auth()->user()->id)->orderby('selected')->orderby('updated_at', 'desc')->get();
 
         foreach ($questions as $question) {
             $categories = DB::table('category_question')
