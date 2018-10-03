@@ -17,7 +17,7 @@ class SocialController extends Controller
 
     public function socialLogin(Request $request, $provider)
     {
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json.json');
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json');
 
         $firebase = (new \Kreait\Firebase\Factory())
             ->withServiceAccount($serviceAccount)
