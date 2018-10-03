@@ -14,11 +14,11 @@ class DatabaseSeeder extends Seeder
     {
 //        DB::table('answers')->delete();
 //        DB::table('questions')->delete();
-//        DB::table('categories')->delete();
+        DB::table('categories')->delete();
 //        DB::table('users')->delete();
 //
 //        $this->call(UserSeeder::class);
-//        $this->call(CategorySeeder::class);
+        $this->call(CategorySeeder::class);
 //        $this->call(QuestionSeeder::class);
 //        $this->call(AnswerSeeder::class);
     }
