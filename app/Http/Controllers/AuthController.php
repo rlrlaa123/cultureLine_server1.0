@@ -29,7 +29,6 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        //    return $request;
         $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
 
         $firebase = (new Factory())
@@ -47,6 +46,13 @@ class AuthController extends Controller
                 if (! $token = auth()->attempt($credentials)) {
                     return response()->json(['error' => 'Unauthorized'], 401);
                 }
+
+                // Device Token Refresh
+                $user = User::where('email', $request->email)->first();
+
+                $user->device_token = $request->device_token;
+
+                $user->save();
 
                 return $this->respondWithToken($token);
             }
@@ -113,7 +119,6 @@ class AuthController extends Controller
             'name' => 'required',
             'stu_id' => 'required',
             'major' => 'required',
-//            'device_token' => 'required',
         ]);
 
         $validator->after(function () {
@@ -131,7 +136,6 @@ class AuthController extends Controller
         $user->name = $request->name;
         $user->stu_id = $request->stu_id;
         $user->major = $request->major;
-//        $user->device_token = $request->device_token;
 
         $user->save();
 
