@@ -17,25 +17,27 @@ class NotificationController extends Controller
     {
         // get Device Token
         $user = User::where('email', $request->email)->first();
-        $deviceToken = $user->device_token;
+        $deviceToken = array("Token" => $user->device_token);
+        $message = array("message" => $request->body);
+
+        $this->sendToFirebase($deviceToken, $request->body);
 
         // set Title, Body
-        $title = $request->title;
-        $body = $request->body;
-        $icon = 'icon';
-
-        // create Notification
-        $notification = Notification::create($title, $body, $icon);
-
-        $message = CloudMessage::withTarget('token', $deviceToken)
-            ->withNotification($notification);
-
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json');
-        $firebase = (new Factory())
-            ->withServiceAccount($serviceAccount)
-            ->create();
-        $messaging = $firebase->getMessaging();
-        $messaging->send($message);
+//        $title = $request->title;
+//        $body = $request->body;
+//
+//        // create Notification
+//        $notification = Notification::create($title, $body);
+//
+//        $message = CloudMessage::withTarget('token', $deviceToken)
+//            ->withNotification($notification);
+//
+//        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json');
+//        $firebase = (new Factory())
+//            ->withServiceAccount($serviceAccount)
+//            ->create();
+//        $messaging = $firebase->getMessaging();
+//        $messaging->send($message);
 
         return response('success', 200);
     }
@@ -90,36 +92,37 @@ class NotificationController extends Controller
 //        }
 //    }
 
-//    public function sendToFirebase($tokens, $message)
-//    {
-//        $url = 'http://fcm.googleapis.com/fcm/send';
-//        $fields = array(
-//            'registration_ids' => $tokens,
-//            'data' => $message
-//        );
-//
-//        $headers = array(
-//            'Authorization:key =
-//                AAAAYarihTU:APA91bHRDdpz_7pUe6cCjVw_-Kpq3gyNoV_sncd41TtLecBp23oYXlS35udmbiFuDoS1VTdWPEXb9WIzS7j4CanlWSf1m_dpyCRdu-fMHzLwsUElb4ohEwfmiS4gYnurLVXhDN33srRX',
-//            'Content-Type: application/json'
-//        );
-//
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, $url);
-//        curl_setopt($ch, CURLOPT_POST, true);
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-//
-//        $result = curl_exec($ch);
-//
-//        if ($result == FALSE) {
-//            die('CURL failed: ' . curl_error($ch));
-//        }
-//
-//        curl_close($ch);
+    public function sendToFirebase($tokens, $message)
+    {
+        $url = 'https://fcm.googleapis.com/v1/projects/cultureline-664f1/messages:send';
+        $fields = array(
+            'registration_ids' => $tokens,
+            'data' => $message
+        );
+
+        $headers = array(
+            'Authorization:key =
+                AAAANieYVLo:APA91bEBicqYyxE2zs9C6ASizPJKh9tadZQFqP5yrCv6r_oRQucjh2chmGQq10yc4hRxhMg4OIVdehv1PxZJLxRY1z_8TrS9135PJVrhimKE4JlpIm1xaVVF6zU-EIC84i49Q6ZnZ3AF',
+            'Content-Type: application/json'
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+        $result = curl_exec($ch);
+
+        if ($result == FALSE) {
+            die('CURL failed: ' . curl_error($ch));
+        }
+
+        curl_close($ch);
+    }
 //
 ////        $client = new \GuzzleHttp\Client([
 ////            'base_uri' => '',
