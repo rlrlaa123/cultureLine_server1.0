@@ -59,7 +59,6 @@ class SocialController extends Controller
                     }
                     // sns 정상 로그인
                     else {
-
                         // firebase refresh
                         $user->device_token = $request->device_token;
 
@@ -94,7 +93,6 @@ class SocialController extends Controller
                         $user->password = Hash::make('social' . $provider);
                         $user->sns = 1;
                         $user->provider = $provider;
-
                         // firebase refresh
                         $user->device_token = $request->device_token;
 
