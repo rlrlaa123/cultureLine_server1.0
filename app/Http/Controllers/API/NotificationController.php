@@ -22,9 +22,10 @@ class NotificationController extends Controller
         // set Title, Body
         $title = $request->title;
         $body = $request->body;
+        $icon = 'icon';
 
         // create Notification
-        $notification = Notification::create($title, $body);
+        $notification = Notification::create($title, $body, $icon);
 
         $message = CloudMessage::withTarget('token', $deviceToken)
             ->withNotification($notification);
