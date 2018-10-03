@@ -122,6 +122,8 @@ class NotificationController extends Controller
         }
 
         curl_close($ch);
+
+        return $result;
     }
 //
 ////        $client = new \GuzzleHttp\Client([
