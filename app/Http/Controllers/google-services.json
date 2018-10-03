@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "620837007241",
-    "firebase_url": "https://chinaroad-12098.firebaseio.com",
-    "project_id": "chinaroad-12098",
-    "storage_bucket": "chinaroad-12098.appspot.com"
+    "project_number": "232592528570",
+    "firebase_url": "https://cultureline-664f1.firebaseio.com",
+    "project_id": "cultureline-664f1",
+    "storage_bucket": "cultureline-664f1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:620837007241:android:ecd6ef3b25779a60",
+        "mobilesdk_app_id": "1:232592528570:android:dac1ce07b20b9b73",
         "android_client_info": {
-          "package_name": "com.cordova.chinaroad"
+          "package_name": "com.culture.inha.cultureline2"
         }
       },
       "oauth_client": [
         {
-          "client_id": "620837007241-mva9bbgv4gjouaj91j8mbauacvdjoi44.apps.googleusercontent.com",
+          "client_id": "232592528570-ce0fkir5hp7g752hamm5qt8hl2h9glaq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.culture.inha.cultureline2",
+            "certificate_hash": "c110bbb065949001c04194160c38b19031ea94f5"
+          }
+        },
+        {
+          "client_id": "232592528570-c5stepf097q57eo2amsh0ipbsnfvl9aj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA24S69RlbQjH7EcN8m8xTNcUky7jh0o20"
+          "current_key": "AIzaSyBPNdrlfnsqrHOJMy7CcpU5MiZEAxTYMzE"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232592528570-c5stepf097q57eo2amsh0ipbsnfvl9aj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
