@@ -15,31 +15,27 @@ class NotificationController extends Controller
 {
     public function sendNotification(Request $request)
     {
+        $receiver = User::where('email', $request->email)->first();
         // get Device Token
-        $user = User::where('email', $request->email)->first();
-        $deviceToken = $user->device_token;
-        $message = array("message" => $request->body);
+        $deviceToken = $receiver->device_token;
+        $message = array("message" => $request->message);
 
-        return $this->sendToFirebase($deviceToken, $message);
+        $result = $this->sendToFirebase($deviceToken, $message);
 
-        // set Title, Body
-//        $title = $request->title;
-//        $body = $request->body;
-//
-//        // create Notification
-//        $notification = Notification::create($title, $body);
-//
-//        $message = CloudMessage::withTarget('token', $deviceToken)
-//            ->withNotification($notification);
-//
-//        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json');
-//        $firebase = (new Factory())
-//            ->withServiceAccount($serviceAccount)
-//            ->create();
-//        $messaging = $firebase->getMessaging();
-//        $messaging->send($message);
+        if ($result["success"]) {
+            $notification = new \App\Notification;
 
-//        return response('success', 200);
+            $notification->sender_id = auth()->user()->id;
+            $notification->receiver_id = $receiver->id;
+            $notification->message = $request->message;
+
+            $notification->save();
+
+            return response('success', 200);
+        }
+        else {
+            return $result;
+        }
     }
 
     public function index($sender_id, $receiver_id)
@@ -54,10 +50,6 @@ class NotificationController extends Controller
                 ['receiver_id', '=', $sender_id]
             ])
             ->get();
-//            ->orWhere('sender_id', $receiver_id)
-//            ->orWhere('receiver_id', $sender_id)
-//            ->orWhere('receiver_id', $receiver_id)
-//            ->get();
 
         return response($notifications, 200);
     }
@@ -75,23 +67,6 @@ class NotificationController extends Controller
         return response('success', 200);
     }
 
-//    public function postToken(Request $request)
-//    {
-//        $user = TestUser::where('token', $request->token)->first();
-//
-//        if ($user === null) {
-//            $user = new TestUser;
-//
-//            $user->token = $request->token;
-//            $user->save();
-//        }
-//        else {
-//            $user->token = $request->token;
-//
-//            $user->save();
-//        }
-//    }
-
     public function sendToFirebase($token, $message)
     {
         $url = 'https://fcm.googleapis.com/fcm/send';
@@ -100,6 +75,7 @@ class NotificationController extends Controller
             'data' => $message
         );
 
+        // Firebase Server Key
         $headers = array(
             'Authorization: key=AAAANieYVLo:APA91bEa4c8h0C2S5rzC3OPDooBVE8NMDGKAD451VdcsjcufiIqOjed9XbatLy85L4iThYGo_VeRzn5cAnYOCTQZ3i9DZ2fYEVCIBm3uvmh_qwxBPpnPaZUuOZfw5Zy4fzNlFPLJbDC6',
             'Content-Type: application/json'
@@ -124,25 +100,4 @@ class NotificationController extends Controller
 
         return $result;
     }
-//
-////        $client = new \GuzzleHttp\Client([
-////            'base_uri' => '',
-////        ]);
-////
-////        $result = $client->post('fcm/send',
-////            [
-////                'debug' => TRUE,
-////                'headers' => [
-////                    'Authorization' => 'key=',
-////                    'Content-Type' => 'application/json',
-////                ],
-////                'form_params' => [
-////                    'registration_ids' => $tokens,
-////                    'data' => $message,
-////                ]
-////            ]
-////        );
-//
-//        return $result;
-//    }
 }
