@@ -40,4 +40,8 @@ return [
         'client_secret' => env('GOOGLE_SECRET'),
         'redirect' => env('GOOGLE_CALLBACK'),
     ],
+
+    'firebase' => [
+        'project_id' => env('FIREBASE_PROJECT_ID'),
+    ],
 ];

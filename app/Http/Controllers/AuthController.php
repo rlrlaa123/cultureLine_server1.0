@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Firebase\Auth\Token\Exception\InvalidToken;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Request\CreateUser;
+use Kreait\Firebase\ServiceAccount;
 use Validator;
 
 class AuthController extends Controller
@@ -23,15 +27,32 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        //    return $request;
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-services.json');
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $firebase = (new Factory())
+            ->withServiceAccount($serviceAccount)
+            ->create();
+
+        $idTokenString = $request->token;
+
+        try {
+            $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
+
+            if ($verifiedIdToken) {
+                $credentials = request(['email', 'password']);
+
+                if (! $token = auth()->attempt($credentials)) {
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                }
+
+                return $this->respondWithToken($token);
+            }
+        } catch (InvalidToken $e) {
+            return response($e->getMessage() . "Error", 200);
         }
-
-        return $this->respondWithToken($token);
     }
 
     /**
@@ -83,6 +104,7 @@ class AuthController extends Controller
         ]);
     }
 
+    // Email Register
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -91,6 +113,7 @@ class AuthController extends Controller
             'name' => 'required',
             'stu_id' => 'required',
             'major' => 'required',
+//            'device_token' => 'required',
         ]);
 
         $validator->after(function () {
@@ -100,6 +123,7 @@ class AuthController extends Controller
             return response($validator->errors());
         }
 
+        // Server Create User
         $user = new User;
 
         $user->email = $request->email;
@@ -107,15 +131,32 @@ class AuthController extends Controller
         $user->name = $request->name;
         $user->stu_id = $request->stu_id;
         $user->major = $request->major;
+//        $user->device_token = $request->device_token;
 
         $user->save();
 
-        $credentials = request(['email', 'password']);
+        // Firebase Server Create User
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-services.json');
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        $firebase = (new Factory)
+            ->withServiceAccount($serviceAccount)
+            ->create();
 
-        return $this->respondWithToken($token);
+        $auth = $firebase->getAuth();
+
+        $userProperties = [
+            'email' => $request->email,
+            'password' => $request->password,
+            'displayName' => $request->name,
+        ];
+
+        $createdUser = $auth->createUser($userProperties);
+
+        return $createdUser;
+    }
+
+    public function testLogin(Request $request)
+    {
+
     }
 }
