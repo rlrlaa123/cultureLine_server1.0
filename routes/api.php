@@ -39,7 +39,7 @@ Route::prefix('answer/{answer}')->group(function() {
 
 Route::post('search', 'API\QNAController@search');
 
-Route::post('notification', 'API\NotificationController@postToken');
+//Route::post('notification', 'API\NotificationController@postToken');
 //Route::post('notification/send', 'API\NotificationController@sendNotification');
 
 Route::get('/me', function (Request $request) {
@@ -47,4 +47,5 @@ Route::get('/me', function (Request $request) {
 })->middleware('auth:api');
 
 Route::get('notification/{sender_id}/{receiver_id}', 'API\NotificationController@index');
-Route::post('notification/send', 'API\NotificationController@store');
+//Route::get('notification/send', 'API\NotificationController@index');
+Route::post('notification', 'API\NotificationController@sendNotification');

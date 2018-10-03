@@ -44,6 +44,12 @@ class SocialController extends Controller
                     }
                     // 추가정보를 입력하지 않았을 경우,
                     if ($user->name == null || $user->stu_id == null || $user->major == null ) {
+
+                        // firebase refresh
+                        $user->device_token = $request->device_token;
+
+                        $user->save();
+
                         return response()->json([
                             'access_token' => $token,
                             'token_type' => 'bearer',
@@ -53,6 +59,12 @@ class SocialController extends Controller
                     }
                     // sns 정상 로그인
                     else {
+
+                        // firebase refresh
+                        $user->device_token = $request->device_token;
+
+                        $user->save();
+
                         return response()->json([
                             'access_token' => $token,
                             'token_type' => 'bearer',
@@ -82,6 +94,8 @@ class SocialController extends Controller
                         $user->password = Hash::make('social' . $provider);
                         $user->sns = 1;
                         $user->provider = $provider;
+
+                        // firebase refresh
                         $user->device_token = $request->device_token;
 
                         $user->save();
