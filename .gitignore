@@ -22,3 +22,5 @@ Homestead.json
 composer.lock
 .gitattributes
 .idea/
+
+composer.json
