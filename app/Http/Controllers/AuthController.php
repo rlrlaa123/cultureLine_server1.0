@@ -149,10 +149,14 @@ class AuthController extends Controller
             'password' => $request->password,
             'displayName' => $request->name,
         ];
+        try {
+            $createdUser = $auth->createUser($userProperties);
 
-        $createdUser = $auth->createUser($userProperties);
+            return response('success', 200);
+        } catch(\Exception $e) {
+            return $e;
+        }
 
-        return $createdUser;
     }
 
     public function testLogin(Request $request)
