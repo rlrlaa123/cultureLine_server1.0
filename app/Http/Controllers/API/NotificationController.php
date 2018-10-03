@@ -94,14 +94,14 @@ class NotificationController extends Controller
 
     public function sendToFirebase($tokens, $message)
     {
-        $url = 'https://fcm.googleapis.com/v1/projects/cultureline-664f1/messages:send';
+        $url = 'https://fcm.googleapis.com/fcm/send';
         $fields = array(
             'registration_ids' => $tokens,
             'data' => $message
         );
 
         $headers = array(
-            'Authorization: Bearer AAAANieYVLo:APA91bEa4c8h0C2S5rzC3OPDooBVE8NMDGKAD451VdcsjcufiIqOjed9XbatLy85L4iThYGo_VeRzn5cAnYOCTQZ3i9DZ2fYEVCIBm3uvmh_qwxBPpnPaZUuOZfw5Zy4fzNlFPLJbDC6',
+            'Authorization: key=AAAANieYVLo:APA91bEa4c8h0C2S5rzC3OPDooBVE8NMDGKAD451VdcsjcufiIqOjed9XbatLy85L4iThYGo_VeRzn5cAnYOCTQZ3i9DZ2fYEVCIBm3uvmh_qwxBPpnPaZUuOZfw5Zy4fzNlFPLJbDC6',
             'Content-Type: application/json'
         );
 
