@@ -158,9 +158,4 @@ class AuthController extends Controller
         }
 
     }
-
-    public function testLogin(Request $request)
-    {
-
-    }
 }
