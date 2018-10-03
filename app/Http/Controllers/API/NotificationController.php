@@ -29,7 +29,7 @@ class NotificationController extends Controller
         $message = CloudMessage::withTarget('token', $deviceToken)
             ->withNotification($notification);
 
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/google-services.json');
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json.json');
         $firebase = (new Factory())
             ->withServiceAccount($serviceAccount)
             ->create();
