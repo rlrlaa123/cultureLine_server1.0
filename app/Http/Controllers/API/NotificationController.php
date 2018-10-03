@@ -101,7 +101,7 @@ class NotificationController extends Controller
         );
 
         $headers = array(
-            'Authorization: Bearer AAAANieYVLo:APA91bEBicqYyxE2zs9C6ASizPJKh9tadZQFqP5yrCv6r_oRQucjh2chmGQq10yc4hRxhMg4OIVdehv1PxZJLxRY1z_8TrS9135PJVrhimKE4JlpIm1xaVVF6zU-EIC84i49Q6ZnZ3AF',
+            'Authorization: Bearer AAAANieYVLo:APA91bEa4c8h0C2S5rzC3OPDooBVE8NMDGKAD451VdcsjcufiIqOjed9XbatLy85L4iThYGo_VeRzn5cAnYOCTQZ3i9DZ2fYEVCIBm3uvmh_qwxBPpnPaZUuOZfw5Zy4fzNlFPLJbDC6',
             'Content-Type: application/json'
         );
 
