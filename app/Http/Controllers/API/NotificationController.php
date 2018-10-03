@@ -22,15 +22,20 @@ class NotificationController extends Controller
 
         $result = $this->sendToFirebase($deviceToken, $message);
 
-        $notification = new \App\Notification;
+        if (json_decode($result, true)["success"] == "1") {
+            $notification = new \App\Notification;
 
-        $notification->sender_id = auth()->user()->id;
-        $notification->receiver_id = $receiver->id;
-        $notification->message = $request->message;
+            $notification->sender_id = auth()->user()->id;
+            $notification->receiver_id = $receiver->id;
+            $notification->message = $request->message;
 
-        $notification->save();
+            $notification->save();
 
-        return $result;
+            return response('success', 200);
+        }
+        else {
+            return $result;
+        }
     }
 
     public function index($sender_id, $receiver_id)
