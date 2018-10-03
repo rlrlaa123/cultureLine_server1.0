@@ -17,10 +17,10 @@ class NotificationController extends Controller
     {
         // get Device Token
         $user = User::where('email', $request->email)->first();
-        $deviceToken = array("Token" => $user->device_token);
+        $deviceToken = $user->device_token;
         $message = array("message" => $request->body);
 
-        return $this->sendToFirebase($deviceToken, $request->body);
+        return $this->sendToFirebase($deviceToken, $message);
 
         // set Title, Body
 //        $title = $request->title;
@@ -39,7 +39,7 @@ class NotificationController extends Controller
 //        $messaging = $firebase->getMessaging();
 //        $messaging->send($message);
 
-        return response('success', 200);
+//        return response('success', 200);
     }
 
     public function index($sender_id, $receiver_id)
@@ -92,11 +92,11 @@ class NotificationController extends Controller
 //        }
 //    }
 
-    public function sendToFirebase($tokens, $message)
+    public function sendToFirebase($token, $message)
     {
         $url = 'https://fcm.googleapis.com/fcm/send';
         $fields = array(
-            'registration_ids' => $tokens,
+            'to' => $token,
             'data' => $message
         );
 
