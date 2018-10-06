@@ -75,7 +75,24 @@ class AnswerController extends Controller
         $answer->selected = 0;
         $answer->comments = [];
 
-        return response($answer, 200);
+        // Send Notification
+//        $receiver = User::where('email', $request->email)->first();
+//
+//        $deviceToken = $receiver->device_token;
+//
+//        $message = array(
+//            "message" => $request->message,
+//            "sender_name" => $request->sender_name,
+//        );
+//
+//        $result = event('sendToFirebase', [$deviceToken, $message]);
+//
+//        if (json_decode($result, true)["success"] == "1") {
+//            return response($answer, 200);
+//        }
+//        else {
+//            return $result;
+//        }
     }
 
     /**
