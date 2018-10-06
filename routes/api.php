@@ -46,6 +46,7 @@ Route::get('/me', function (Request $request) {
     return (array) $request->user();
 })->middleware('auth:api');
 
-Route::get('notification/{sender_id}/{receiver_id}', 'API\NotificationController@index');
-//Route::get('notification/send', 'API\NotificationController@index');
+
 Route::post('notification', 'API\NotificationController@sendNotification');
+Route::get('notification', 'API\NotificationController@index');
+Route::get('notification/{sender_id}/{receiver_id}', 'API\NotificationController@show');
