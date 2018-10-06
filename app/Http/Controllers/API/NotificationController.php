@@ -23,7 +23,10 @@ class NotificationController extends Controller
         // get Device Token
         $deviceToken = $receiver->device_token;
 
-        $message = array("message" => $request->message);
+        $message = array(
+            "message" => $request->message,
+            "sender_name" => auth()->user()->name,
+        );
 
         $result = $this->sendToFirebase($deviceToken, $message);
 
