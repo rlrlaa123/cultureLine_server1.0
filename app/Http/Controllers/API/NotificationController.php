@@ -74,31 +74,27 @@ class NotificationController extends Controller
 
         // add notification's result in result array
         foreach ($notifications as $notification) {
-            $count = 0;
-            for ($i = 0; $i < count($results); $i++) {
+            for ($i = $j; $i < count($results); $i++) {
                 if (($results[$i]->sender_id == $notification->sender_id && $results[$i]->receiver_id == $notification->receiver_id)
                     || ($results[$i]->sender_id == $notification->receiver_id && $results[$i]->receiver_id == $notification->sender_id)) {
                 } else {
-//                    $j += 1;
-                    $count += 1;
-                }
-            }
+                    $user_lists = [$notification->sender_id, $notification->receiver_id];
+                    $user_id = null;
 
-            if ($count == 0) {
-                $user_lists = [$notification->sender_id, $notification->receiver_id];
-                $user_id = null;
-
-                foreach ($user_lists as $user_list) {
-                    if (!($user_list == auth()->user()->id)) {
-                        $user_id = $user_list;
+                    foreach ($user_lists as $user_list) {
+                        if (!($user_list == auth()->user()->id)) {
+                            $user_id = $user_list;
+                        }
                     }
+
+                    $user = User::find($user_id);
+
+                    $notification['user'] = $user;
+
+                    array_push($results, $notification);
+
+                    $j += 1;
                 }
-
-                $user = User::find($user_id);
-
-                $notification['user'] = $user;
-
-                array_push($results, $notification);
             }
         }
 
