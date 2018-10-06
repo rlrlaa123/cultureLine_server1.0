@@ -78,7 +78,8 @@ class AnswerController extends Controller
 
         // Send Notification
         $receiver_id = $question->author->id;
-        $receiver = User::find($receiver_id)->first();
+
+        $receiver = User::find($receiver_id);
 
         $deviceToken = $receiver->device_token;
 
