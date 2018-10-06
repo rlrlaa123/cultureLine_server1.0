@@ -89,11 +89,11 @@ class AnswerController extends Controller
 
         $result = event('sendToFirebase', [$deviceToken, $message]);
 
-        if (json_decode($result, true)["success"] == "1") {
+        if (json_decode($result[0], true)["success"] == "1") {
             return response($answer, 200);
         }
         else {
-            return $result;
+            return $result[0];
         }
     }
 
