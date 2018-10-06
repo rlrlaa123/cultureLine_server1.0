@@ -30,7 +30,7 @@ class NotificationController extends Controller
 
         $result = event('sendToFirebase', [$deviceToken, $message]);
 
-        if (json_decode($result, true)["success"] == "1") {
+        if (json_decode($result[0], true)["success"] == "1") {
             $notification = new \App\Notification;
 
             $notification->sender_id = auth()->user()->id;
@@ -42,7 +42,7 @@ class NotificationController extends Controller
             return response('success', 200);
         }
         else {
-            return $result;
+            return $result[0];
         }
     }
 
