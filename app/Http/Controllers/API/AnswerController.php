@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Answer;
 use App\Question;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -76,23 +77,24 @@ class AnswerController extends Controller
         $answer->comments = [];
 
         // Send Notification
-//        $receiver = User::where('email', $request->email)->first();
-//
-//        $deviceToken = $receiver->device_token;
-//
-//        $message = array(
-//            "message" => $request->message,
-//            "sender_name" => $request->sender_name,
-//        );
-//
-//        $result = event('sendToFirebase', [$deviceToken, $message]);
-//
-//        if (json_decode($result, true)["success"] == "1") {
-//            return response($answer, 200);
-//        }
-//        else {
-//            return $result;
-//        }
+        $receiver_id = $question->author->id;
+        $receiver = User::find($receiver_id)->first();
+
+        $deviceToken = $receiver->device_token;
+
+        $message = array(
+            "message" => "질문에 답변이 달렸습니다.",
+            "sender_name" => auth()->user()->name,
+        );
+
+        $result = event('sendToFirebase', [$deviceToken, $message]);
+
+        if (json_decode($result, true)["success"] == "1") {
+            return response($answer, 200);
+        }
+        else {
+            return $result;
+        }
     }
 
     /**

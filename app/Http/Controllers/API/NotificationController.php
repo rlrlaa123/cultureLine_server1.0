@@ -99,7 +99,6 @@ class NotificationController extends Controller
             }
         }
 
-//        return response($notifications, 200);
         return response($results, 200);
     }
 
@@ -118,43 +117,4 @@ class NotificationController extends Controller
 
         return response($notifications, 200);
     }
-
-    public function store(Request $request)
-    {
-
-    }
-
-//    public function sendToFirebase($token, $message)
-//    {
-//        $url = 'https://fcm.googleapis.com/fcm/send';
-//        $fields = array(
-//            'to' => $token,
-//            'data' => $message
-//        );
-//
-//        // Firebase Server Key
-//        $headers = array(
-//            'Authorization: key=AAAANieYVLo:APA91bEa4c8h0C2S5rzC3OPDooBVE8NMDGKAD451VdcsjcufiIqOjed9XbatLy85L4iThYGo_VeRzn5cAnYOCTQZ3i9DZ2fYEVCIBm3uvmh_qwxBPpnPaZUuOZfw5Zy4fzNlFPLJbDC6',
-//            'Content-Type: application/json'
-//        );
-//
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, $url);
-//        curl_setopt($ch, CURLOPT_POST, true);
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-//
-//        $result = curl_exec($ch);
-//
-//        if ($result == FALSE) {
-//            die('CURL failed: ' . curl_error($ch));
-//        }
-//
-//        curl_close($ch);
-//
-//        return $result;
-//    }
 }
