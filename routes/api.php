@@ -20,6 +20,7 @@ Route::get('auth/me', 'AuthController@me');
 
 Route::post('social/login/{provider}', 'SocialController@socialLogin')->name('social.login');
 Route::post('social/register', 'SocialController@socialRegister')->name('social.register');
+Route::post('social/custom', 'SocialController@customLogin')->name('social.custom');
 
 Route::get('category', 'API\CategoryController@index')->name('category.index');
 
@@ -39,13 +40,9 @@ Route::prefix('answer/{answer}')->group(function() {
 
 Route::post('search', 'API\QNAController@search');
 
-//Route::post('notification', 'API\NotificationController@postToken');
-//Route::post('notification/send', 'API\NotificationController@sendNotification');
-
 Route::get('/me', function (Request $request) {
     return (array) $request->user();
 })->middleware('auth:api');
-
 
 Route::post('notification', 'API\NotificationController@sendNotification');
 Route::get('notification', 'API\NotificationController@index');

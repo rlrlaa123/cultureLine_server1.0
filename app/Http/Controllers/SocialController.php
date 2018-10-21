@@ -143,4 +143,19 @@ class SocialController extends Controller
 
         return response(auth()->user(), 200);
     }
+
+    public function customLogin(Request $request)
+    {
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json');
+
+        $firebase = (new \Kreait\Firebase\Factory())
+            ->withServiceAccount($serviceAccount)
+            ->create();
+
+        $uid = $request->uid;
+
+        $customToken = $firebase->getAuth()->createCustomToken($uid);
+
+        return response($customToken, 200);
+    }
 }
