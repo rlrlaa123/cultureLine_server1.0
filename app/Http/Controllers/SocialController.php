@@ -12,7 +12,7 @@ use Validator;
 class SocialController extends Controller
 {
     public function __construct( ) {
-        $this->middleware('jwt.auth', ['except' => ['socialLogin']]);
+        $this->middleware('jwt.auth', ['except' => ['socialLogin', 'customLogin']]);
     }
 
     public function socialLogin(Request $request, $provider)
@@ -153,8 +153,12 @@ class SocialController extends Controller
             ->create();
 
         $uid = $request->uid;
+        $additionalClaims = [
+            'iss' => $request->email,
+            'sub' => $request->email,
+        ];
 
-        $customToken = $firebase->getAuth()->createCustomToken($uid);
+        $customToken = $firebase->getAuth()->createCustomToken($uid, $additionalClaims);
 
         return response($customToken, 200);
     }
