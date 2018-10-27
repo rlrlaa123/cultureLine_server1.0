@@ -178,7 +178,9 @@ class AuthController extends Controller
 
     public function pwSearch()
     {
+        $user = auth()->user();
 
+        return response($user, 200);
     }
 
     public function userProfile(Request $request)
@@ -188,6 +190,6 @@ class AuthController extends Controller
 
         $user->save();
 
-        return response(200, $user);
+        return response($user, 200);
     }
 }
