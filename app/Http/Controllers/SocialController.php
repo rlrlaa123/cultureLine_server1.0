@@ -139,6 +139,10 @@ class SocialController extends Controller
         $user->stu_id = $request->stu_id;
         $user->major = $request->major;
 
+        if ($request->profile != null) {
+            $user->profile = $request->profile;
+        }
+
         $user->save();
 
         return response(auth()->user(), 200);
