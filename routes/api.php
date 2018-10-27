@@ -17,6 +17,10 @@ Route::post('auth/login', 'AuthController@login');
 Route::post('auth/register', 'AuthController@register');
 Route::post('auth/logout', 'AuthController@logout');
 Route::get('auth/me', 'AuthController@me');
+Route::post('auth/profile', 'AuthController@userProfile');
+
+Route::post('auth/id', 'AuthController@idSearch');
+Route::post('auth/pw', 'AuthController@pwSearch');
 
 Route::post('social/login/{provider}', 'SocialController@socialLogin')->name('social.login');
 Route::post('social/register', 'SocialController@socialRegister')->name('social.register');
@@ -43,6 +47,8 @@ Route::post('search', 'API\QNAController@search');
 Route::get('/me', function (Request $request) {
     return (array) $request->user();
 })->middleware('auth:api');
+
+//Route::get('/notice', 'API\NoticeController@index');
 
 Route::post('notification', 'API\NotificationController@sendNotification');
 Route::get('notification', 'API\NotificationController@index');

@@ -19,7 +19,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'idSearch', 'pwSearch']]);
     }
 
     /**
@@ -29,18 +29,18 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
-
-        $firebase = (new Factory())
-            ->withServiceAccount($serviceAccount)
-            ->create();
+//        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
+//
+//        $firebase = (new Factory())
+//            ->withServiceAccount($serviceAccount)
+//            ->create();
 
         $idTokenString = $request->token;
 
         try {
-            $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
+//            $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
 
-            if ($verifiedIdToken) {
+//            if ($verifiedIdToken) {
                 $credentials = request(['email', 'password']);
 
                 if (! $token = auth()->attempt($credentials)) {
@@ -50,12 +50,12 @@ class AuthController extends Controller
                 // Device Token Refresh
                 $user = User::where('email', $request->email)->first();
 
-                $user->device_token = $request->device_token;
+//                $user->device_token = $request->device_token;
 
                 $user->save();
 
                 return $this->respondWithToken($token);
-            }
+//            }
         } catch (InvalidToken $e) {
             return response($e->getMessage() . "Error", 200);
         }
@@ -137,6 +137,10 @@ class AuthController extends Controller
         $user->stu_id = $request->stu_id;
         $user->major = $request->major;
 
+        if ($request->profile != null) {
+            $user->profile = $request->profile;
+        }
+
         $user->save();
 
         // Firebase Server Create User
@@ -160,6 +164,30 @@ class AuthController extends Controller
         } catch(\Exception $e) {
             return $e;
         }
+    }
 
+    public function idSearch(Request $request)
+    {
+        $user = User::where([
+            ['stu_id', '=', $request->stu_id],
+            ['name', '=', $request->name],
+        ])->get();
+
+        return response($user, 200);
+    }
+
+    public function pwSearch()
+    {
+
+    }
+
+    public function userProfile(Request $request)
+    {
+        $user = auth()->user();
+        $user->profile = $request->profile;
+
+        $user->save();
+
+        return response(200, $user);
     }
 }
