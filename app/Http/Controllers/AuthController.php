@@ -180,7 +180,7 @@ class AuthController extends Controller
     {
         $user = auth()->user();
 
-        return response($user, 200);
+        return response("success", 200);
     }
 
     public function userProfile(Request $request)
@@ -190,6 +190,6 @@ class AuthController extends Controller
 
         $user->save();
 
-        return response($user, 200);
+        return response("success", 200);
     }
 }
