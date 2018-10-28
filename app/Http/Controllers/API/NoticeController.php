@@ -9,10 +9,10 @@ use Goutte\Client;
 
 class NoticeController extends Controller
 {
-//    public function __construct( )
-//    {
-//        $this->middleware('jwt.auth');
-//    }
+    public function __construct( )
+    {
+        $this->middleware('jwt.auth');
+    }
 
     public function index()
     {
