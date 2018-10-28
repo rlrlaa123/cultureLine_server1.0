@@ -28,6 +28,8 @@ Route::post('social/custom', 'SocialController@customLogin')->name('social.custo
 
 Route::get('category', 'API\CategoryController@index')->name('category.index');
 
+Route::get('notice', 'API\NoticeController@index')->name('notice.index');
+
 Route::resource('qna', 'API\QNAController');
 Route::get('auth/question', 'API\QNAController@myQuestion')->name('question.myQuestion');
 Route::get('category/search/{category_id}', 'API\QNAController@categorySearch')->name('category.search');

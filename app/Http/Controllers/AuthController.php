@@ -176,7 +176,7 @@ class AuthController extends Controller
         return response($user, 200);
     }
 
-    public function pwSearch()
+    public function pwSearch(Request $request)
     {
         $user = auth()->user();
 
