@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\ServiceAccount;
@@ -29,18 +30,18 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-//        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
-//
-//        $firebase = (new Factory())
-//            ->withServiceAccount($serviceAccount)
-//            ->create();
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
+
+        $firebase = (new Factory())
+            ->withServiceAccount($serviceAccount)
+            ->create();
 
         $idTokenString = $request->token;
 
         try {
-//            $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
+            $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
 
-//            if ($verifiedIdToken) {
+            if ($verifiedIdToken) {
                 $credentials = request(['email', 'password']);
 
                 if (! $token = auth()->attempt($credentials)) {
@@ -50,12 +51,12 @@ class AuthController extends Controller
                 // Device Token Refresh
                 $user = User::where('email', $request->email)->first();
 
-//                $user->device_token = $request->device_token;
+                $user->device_token = $request->device_token;
 
                 $user->save();
 
                 return $this->respondWithToken($token);
-//            }
+            }
         } catch (InvalidToken $e) {
             return response($e->getMessage() . "Error", 200);
         }
@@ -132,7 +133,7 @@ class AuthController extends Controller
         $user = new User;
 
         $user->email = $request->email;
-        $user->password = bcrypt($request->password);
+        $user->password = $request->password;
         $user->name = $request->name;
         $user->stu_id = $request->stu_id;
         $user->major = $request->major;
@@ -178,9 +179,35 @@ class AuthController extends Controller
 
     public function pwSearch(Request $request)
     {
-        $user = auth()->user();
+        $user = User::where('email', $request->email)->first();
+//        return $user;
+        // 이메일 로그인일 경우
+        if ($user->sns == 0) {
+            Mail::send(
+                'emails.auth.pw',
+                compact('user'),
+                function ($message) use ($user) {
+                    $message->to('hello4@hello.com');
+                    $message->subject('[인하컬쳐라인] 비밀번호 찾기 안내 메일');
+                }
+            );
 
-        return response("success", 200);
+            return response("success", 200);
+        }
+
+        // sns 로그인일 경우
+        else {
+            Mail::send(
+                'emails.auth.snspw',
+                compact('user'),
+                function ($message) use ($user) {
+                    $message->to($user->email);
+                    $message->subject('[인하컬쳐라인] 비밀번호 찾기 안내 메일');
+                }
+            );
+
+            return response("success", 200);
+        }
     }
 
     public function userProfile(Request $request)
