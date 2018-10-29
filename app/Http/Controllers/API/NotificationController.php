@@ -115,6 +115,14 @@ class NotificationController extends Controller
             ])
             ->get();
 
+        foreach ($notifications as $notification) {
+            $sender_profile = User::find($notification->sender_id);
+            $receiver_profile = User::find($notification->receiver_id);
+
+            $notification->sender_profile = $sender_profile->profile;
+            $notification->receiver_profile = $receiver_profile;
+        }
+
         return response($notifications, 200);
     }
 }
