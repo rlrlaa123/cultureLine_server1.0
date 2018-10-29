@@ -120,7 +120,7 @@ class NotificationController extends Controller
             $receiver_profile = User::find($notification->receiver_id);
 
             $notification->sender_profile = $sender_profile->profile;
-            $notification->receiver_profile = $receiver_profile;
+            $notification->receiver_profile = $receiver_profile->profile;
         }
 
         return response($notifications, 200);
