@@ -187,7 +187,7 @@ class AuthController extends Controller
                 'emails.auth.pw',
                 compact('user'),
                 function ($message) use ($user) {
-                    $message->to('hello4@hello.com');
+                    $message->to($user->email);
                     $message->subject('[인하컬쳐라인] 비밀번호 찾기 안내 메일');
                 }
             );
