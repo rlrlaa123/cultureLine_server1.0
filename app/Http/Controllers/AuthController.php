@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Request\CreateUser;
@@ -133,7 +134,7 @@ class AuthController extends Controller
         $user = new User;
 
         $user->email = $request->email;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         $user->name = $request->name;
         $user->stu_id = $request->stu_id;
         $user->major = $request->major;
@@ -155,7 +156,7 @@ class AuthController extends Controller
 
         $userProperties = [
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
             'displayName' => $request->name,
         ];
         try {
