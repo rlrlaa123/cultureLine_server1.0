@@ -155,7 +155,7 @@ class AuthController extends Controller
 
         $userProperties = [
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => $request->password,
             'displayName' => $request->name,
         ];
         try {
