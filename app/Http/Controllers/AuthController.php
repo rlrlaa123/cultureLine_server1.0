@@ -206,7 +206,6 @@ class AuthController extends Controller
         try{
             $updatedUser = $auth->updateUser($uid, $properties);
 
-            return $updatedUser;
             return response("success", 200);
         } catch (\Exception $e) {
             return response('firebase-update-error: ' . $e, 401);
