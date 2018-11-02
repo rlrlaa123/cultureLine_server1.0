@@ -180,13 +180,31 @@ class AuthController extends Controller
 
     public function pwReset(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
 
-        $user->password = bcrypt($request->password);
+        $firebase = (new Factory)
+            ->withServiceAccount($serviceAccount)
+            ->create();
 
-        $user->save();
+        $auth = $firebase->getAuth();
+        $user = $auth->getUserByEmail($request->email);
 
-        return response("success", 200);
+        $uid = $user->uid;
+
+
+        try{
+            $updatedUser = $auth->changeUserPassword($uid, $request->password);
+
+            $user = User::where('email', $request->email)->first();
+
+            $user->password = bcrypt($request->password);
+
+            $user->save();
+
+            return response("success", 200);
+        } catch (\Exception $e) {
+            return response('firebase-update-error: ' . $e, 401);
+        }
     }
 
     public function userProfile(Request $request)
