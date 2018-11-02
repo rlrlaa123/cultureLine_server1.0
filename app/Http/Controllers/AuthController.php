@@ -172,42 +172,21 @@ class AuthController extends Controller
         $user = User::where([
             ['stu_id', '=', $request->stu_id],
             ['name', '=', $request->name],
+            ['sns', '=', 0]
         ])->get();
 
         return response($user, 200);
     }
 
-    public function pwSearch(Request $request)
+    public function pwReset(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-//        return $user;
-        // 이메일 로그인일 경우
-        if ($user->sns == 0) {
-            Mail::send(
-                'emails.auth.pw',
-                compact('user'),
-                function ($message) use ($user) {
-                    $message->to($user->email);
-                    $message->subject('[인하컬쳐라인] 비밀번호 찾기 안내 메일');
-                }
-            );
 
-            return response("success", 200);
-        }
+        $user->password = bcrypt($request->password);
 
-        // sns 로그인일 경우
-        else {
-            Mail::send(
-                'emails.auth.snspw',
-                compact('user'),
-                function ($message) use ($user) {
-                    $message->to($user->email);
-                    $message->subject('[인하컬쳐라인] 비밀번호 찾기 안내 메일');
-                }
-            );
+        $user->save();
 
-            return response("success", 200);
-        }
+        return response("success", 200);
     }
 
     public function userProfile(Request $request)
