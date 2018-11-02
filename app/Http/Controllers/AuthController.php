@@ -199,9 +199,9 @@ class AuthController extends Controller
         $uid = $user->uid;
 
         $properties = [
-            'password' => bcrypt($request->password),
+            'password' => $request->password
         ];
-
+        return $properties;
         try{
             $updatedUser = $auth->updateUser($uid, $properties);
 
