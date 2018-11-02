@@ -180,6 +180,13 @@ class AuthController extends Controller
 
     public function pwReset(Request $request)
     {
+
+        $user = User::where('email', $request->email)->first();
+
+        $user->password = bcrypt($request->password);
+
+        $user->save();
+
         $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
 
         $firebase = (new Factory)
@@ -191,15 +198,8 @@ class AuthController extends Controller
 
         $uid = $user->uid;
 
-
         try{
             $updatedUser = $auth->changeUserPassword($uid, $request->password);
-
-            $user = User::where('email', $request->email)->first();
-
-            $user->password = bcrypt($request->password);
-
-            $user->save();
 
             return response("success", 200);
         } catch (\Exception $e) {
