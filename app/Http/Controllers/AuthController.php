@@ -199,7 +199,7 @@ class AuthController extends Controller
         $uid = $user->uid;
 
         $properties = [
-            'password' => $request->password,
+            'password' => bcrypt($request->password),
         ];
 
         try{
