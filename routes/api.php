@@ -20,7 +20,7 @@ Route::get('auth/me', 'AuthController@me');
 Route::post('auth/profile', 'AuthController@userProfile');
 
 Route::post('auth/id', 'AuthController@idSearch');
-Route::post('auth/pw', 'AuthController@pwSearch');
+Route::post('auth/pw', 'AuthController@pwReset');
 
 Route::post('social/login/{provider}', 'SocialController@socialLogin')->name('social.login');
 Route::post('social/register', 'SocialController@socialRegister')->name('social.register');
