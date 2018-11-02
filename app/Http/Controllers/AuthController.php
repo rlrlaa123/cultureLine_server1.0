@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Request\CreateUser;
+use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\ServiceAccount;
 use Validator;
 
@@ -180,7 +181,6 @@ class AuthController extends Controller
 
     public function pwReset(Request $request)
     {
-
         $user = User::where('email', $request->email)->first();
 
         $user->password = bcrypt($request->password);
@@ -198,9 +198,15 @@ class AuthController extends Controller
 
         $uid = $user->uid;
 
-        try{
-            $updatedUser = $auth->changeUserPassword($uid, $request->password);
+        $properties = [
+            'password' => bcrypt($request->password),
+        ];
 
+
+        try{
+            $updatedUser = $auth->updateUser($uid, $properties);
+
+            return $updatedUser;
             return response("success", 200);
         } catch (\Exception $e) {
             return response('firebase-update-error: ' . $e, 401);
