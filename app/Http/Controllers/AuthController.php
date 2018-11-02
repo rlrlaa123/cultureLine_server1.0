@@ -198,12 +198,8 @@ class AuthController extends Controller
 
         $uid = $user->uid;
 
-        $properties = [
-            'password' => $request->password,
-        ];
-
         try{
-            $updatedUser = $auth->updateUser($uid, $properties);
+            $updatedUser = $auth->changeUserPassword($uid, $request->password);
 
             return response("success", 200);
         } catch (\Exception $e) {
