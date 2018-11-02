@@ -201,7 +201,7 @@ class AuthController extends Controller
         $properties = [
             'password' => $request->password
         ];
-        return $properties;
+
         try{
             $updatedUser = $auth->updateUser($uid, $properties);
 
