@@ -18,12 +18,12 @@ class CategorySeeder extends Seeder
         $category->save();
 
         $category = new Category;
-        $category->name = '경영';
+        $category->name = '창작';
 
         $category->save();
 
         $category = new Category;
-        $category->name = '디자인';
+        $category->name = '문화기관';
 
         $category->save();
 
