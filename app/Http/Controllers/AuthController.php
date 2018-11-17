@@ -21,7 +21,8 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'idSearch', 'pwReset']]);
+        $this->middleware('auth:api', [
+            'except' => ['login', 'register', 'idSearch', 'pwReset', 'iosLogin']]);
     }
 
     /**
@@ -117,7 +118,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|confirmed',
+            'password' => 'required|string|min:8|confirmed',
             'name' => 'required',
             'stu_id' => 'required',
             'major' => 'required',
@@ -219,5 +220,36 @@ class AuthController extends Controller
         $user->save();
 
         return response("success", 200);
+    }
+
+    public function iosLogin(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $validator->after(function () {
+        });
+
+        if ($validator->fails()) {
+            return response($validator->errors());
+        }
+
+        $credentials = request(['email', 'password']);
+
+        if (! $token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        // Device Token Refresh
+        $user = User::where('email', $request->email)->first();
+
+//        $user->device_token = $request->device_token;
+
+        $user->save();
+
+        return $this->respondWithToken($token);
     }
 }

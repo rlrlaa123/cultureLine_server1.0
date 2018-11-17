@@ -18,6 +18,7 @@ Route::post('auth/register', 'AuthController@register');
 Route::post('auth/logout', 'AuthController@logout');
 Route::get('auth/me', 'AuthController@me');
 Route::post('auth/profile', 'AuthController@userProfile');
+Route::post('auth/ios/login', 'AuthController@iosLogin');
 
 Route::post('auth/id', 'AuthController@idSearch');
 Route::post('auth/pw', 'AuthController@pwReset');

@@ -39,7 +39,7 @@ return [
     'digits'               => ':attribute은(는) :digits 자릿수여야 합니다.',
     'digits_between'       => ':attribute은(는) :min에서 :max 자릿수 사이여야 합니다.',
     'distinct'             => 'The :attribute field has a duplicate value.',
-    'email'                => ':attribute 형식은 유효하지 않습니다.',
+    'email'                => ':attribute 형식이 유효하지 않습니다.',
     'exists'               => '선택된 :attribute은(는) 유효하지 않습니다.',
     'filled'               => ':attribute 필드는 필수입니다.',
     'image'                => ':attribute은(는) 이미지여야 합니다.',
