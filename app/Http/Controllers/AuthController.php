@@ -31,7 +31,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json');
 
         $firebase = (new Factory())
             ->withServiceAccount($serviceAccount)
@@ -146,7 +146,7 @@ class AuthController extends Controller
         $user->save();
 
         // Firebase Server Create User
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json');
 
         $firebase = (new Factory)
             ->withServiceAccount($serviceAccount)
@@ -187,7 +187,7 @@ class AuthController extends Controller
 
         $user->save();
 
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase-admin-sdk.json');
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase-admin-sdk.json');
 
         $firebase = (new Factory)
             ->withServiceAccount($serviceAccount)

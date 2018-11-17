@@ -13,21 +13,20 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('auth/login', 'Auth\AuthController@login');
-Route::post('auth/register', 'Auth\AuthController@register');
-Route::post('auth/logout', 'Auth\AuthController@logout');
-Route::get('auth/me', 'Auth\AuthController@me');
-Route::post('auth/profile', 'Auth\AuthController@userProfile');
+Route::post('auth/login', 'AuthController@login');
+Route::post('auth/register', 'AuthController@register');
+Route::post('auth/logout', 'AuthController@logout');
+Route::get('auth/me', 'AuthController@me');
+Route::post('auth/profile', 'AuthController@userProfile');
 
-Route::post('auth/id', 'Auth\AuthController@idSearch');
-Route::post('auth/pw', 'Auth\AuthController@pwReset');
+Route::post('auth/id', 'AuthController@idSearch');
+Route::post('auth/pw', 'AuthController@pwReset');
 
-Route::post('social/login/{provider}', 'Auth\SocialController@socialLogin')->name('social.login');
-Route::post('social/register', 'Auth\SocialController@socialRegister')->name('social.register');
-Route::post('social/custom', 'Auth\SocialController@customLogin')->name('social.custom');
+Route::post('social/login/{provider}', 'SocialController@socialLogin')->name('social.login');
+Route::post('social/register', 'SocialController@socialRegister')->name('social.register');
+Route::post('social/custom', 'SocialController@customLogin')->name('social.custom');
 
 Route::get('category', 'API\CategoryController@index')->name('category.index');
-Route::put('category/{category}', 'API\CategoryController@update')->name('category.update');
 
 Route::get('notice', 'API\NoticeController@index')->name('notice.index');
 
