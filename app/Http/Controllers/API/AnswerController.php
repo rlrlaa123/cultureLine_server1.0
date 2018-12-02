@@ -94,7 +94,7 @@ class AnswerController extends Controller
             return response($answer, 200);
         }
         else {
-            return $result[0];
+            return response($result[0], 201);
         }
     }
 
